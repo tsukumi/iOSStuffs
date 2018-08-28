@@ -1,0 +1,58 @@
+CREATE TABLE author(
+    author_id integer PRIMARY KEY,
+    first_name tinytext,
+    middle_name tinytext,
+    last_name tinytext,
+    email text,
+    phone tinytext,
+    address mediumtext
+);
+
+CREATE TABLE publisher(
+	publisher_id integer PRIMARY KEY,
+    name tinytext,
+    email text,
+    phone tinytext,
+    address mediumtext
+);
+
+CREATE TABLE book(
+	book_id integer PRIMARY KEY,
+    isbn varchar(17),
+    title text,
+    publisher integer,
+    pub_date tinytext,
+    edition integer,
+    
+    CONSTRAINT fk_publisher FOREIGN KEY (publisher) REFERENCES publisher(publisher_id)
+);
+
+CREATE TABLE chapter(
+	chapter_number integer,
+    book integer,
+    title text,
+    contents longtext,
+    
+    CONSTRAINT pk_chapter PRIMARY KEY (chapter_number, book),
+    CONSTRAINT fk_book FOREIGN KEY (book) REFERENCES book(book_id)
+);
+
+CREATE TABLE wrote_book(
+	author integer,
+    book integer,
+    
+    CONSTRAINT pk_wrotebook PRIMARY KEY (author, book),
+    CONSTRAINT fk_author_b FOREIGN KEY (author) REFERENCES author(author_id),
+    CONSTRAINT fk_book_b FOREIGN KEY (book) REFERENCES book(book_id)
+);
+
+CREATE TABLE wrote_chapter(
+	author integer,
+    book integer,
+    chapter integer,
+    
+    CONSTRAINT pk_wrotechapter PRIMARY KEY (author, book, chapter),
+    CONSTRAINT fk_author_c FOREIGN KEY (author) REFERENCES author(author_id),
+    CONSTRAINT fk_book_c FOREIGN KEY (book) REFERENCES book(book_id),
+	CONSTRAINT fk_chapter_c FOREIGN KEY (chapter) REFERENCES chapter(chapter_number)
+);
